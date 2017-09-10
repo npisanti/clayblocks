@@ -1,5 +1,4 @@
 
-
 int keyMode;
 int uiH;
 int timer;
@@ -34,7 +33,7 @@ void settingsDraw() {
         "by : " + nfp(by, 1, 3) + "\n" +
         "bz : " + nfp(bz, 1, 3), 0, uiH*3, width, uiH);
     text("back", 0, uiH*4, width/2, uiH);
-    text("save to SD card", width/2, uiH*4, width/2 -2, uiH);
+    text("save settings\n(sd card needed)", width/2, uiH*4, width/2 -2, uiH);
     
     if (keyMode!=-1) {
         textAlign( LEFT, TOP );

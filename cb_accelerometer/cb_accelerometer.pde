@@ -3,10 +3,8 @@ String destinationIP = "192.168.1.4";
 int    port          = 12345;
 String id            = "zero";
 float  deadzone      = 0.7;
-String savename = "\\sdcard\\cb_accelerometer.txt";
+String savename = "\\sdcard\\cb_accelerometer_settings.txt";
 //-----------------------------------------------
-
-
 
 import ketai.sensors.*;
 import ketai.ui.*;
@@ -24,10 +22,7 @@ boolean bCalibrate;
 
 void setup()
 {
-
-    File f = new File( savename );
-    if (f.exists()) {
-        println("found settings file");
+    try { 
         String[] lines = loadStrings( savename );
         id = lines[0];
         destinationIP = lines[1];
@@ -35,8 +30,11 @@ void setup()
         bx = parseFloat(lines[3]);
         by = parseFloat(lines[4]);
         bz = parseFloat(lines[5]);
-    }else{
-        bx = by = bz = 0.0;   
+        println("found settings file");
+    } catch (Exception e){ 
+        bx = 0.0;
+        by = 0.0;
+        bz = 0.0;   
     }
     
     fullScreen();
