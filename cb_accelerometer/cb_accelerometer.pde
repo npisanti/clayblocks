@@ -6,6 +6,8 @@ float  deadzone      = 0.7;
 float  boundary      = 6.0;
 String savename      = "\\sdcard\\cb_accelerometer_settings.txt";
 //-----------------------------------------------
+// FAST TAP THREE TIMES THE SCREEN TO SET THE PARAMETERS
+// optionally you can save them if you have an SD card
 
 import ketai.sensors.*;
 import ketai.ui.*;
