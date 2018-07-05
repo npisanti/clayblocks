@@ -1,6 +1,12 @@
 np-clayblocks
 ==============
-This is a collection of processing sketches to use android devices as sensors or OSC controllers.
+np-clayblocks is a collection sketches/prototypes of devices that send and receive OSC messages over the network. It includes both android based controllers and raspberry pi based devices that convert sensors reading to OSC messages or control actuators by receiving OSC messages. 
+
+The android sketches are written in [processing](https://processing.org/) with the [oscP5](http://www.sojamo.de/libraries/oscP5/) library. For the phone accelerometer you also need the [ketai](http://ketai.org/) library.
+
+The raspberry pi sketches are openFrameworks apps, so you need [openFrameworks](https://openframeworks.cc/), and also [ofxGPIO](https://github.com/kashimAstro/ofxGPIO) and ofxOsc (included in oF).
+
+Go into the individual folders for usage and pictures.
 
 Here are some test videos:
 
