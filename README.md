@@ -6,6 +6,8 @@ The android sketches are written in [processing](https://processing.org/) with t
 
 The raspberry pi sketches are openFrameworks apps, so you need [openFrameworks](https://openframeworks.cc/), and also [ofxGPIO](https://github.com/kashimAstro/ofxGPIO) and ofxOsc (included in oF).
 
+A piezo sensor device is avaible on a separated repository, called [ofxRPiezos](https://github.com/npisanti/ofxRPiezos).
+
 Go into the individual folders for usage and pictures.
 
 Here are some test videos:
