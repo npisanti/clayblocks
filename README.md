@@ -20,3 +20,9 @@ np-clayblocks keys:
 
 np-clayblocks xy control:   
 [![np-clayblocks xy control](https://i.vimeocdn.com/video/492704537_640.jpg)](https://vimeo.com/108881498 "np-clayblocks xy control")
+
+capacitive touch device: 
+![alt tag](https://github.com/npisanti/np-clayblocks/blob/master/capacitive/mpr121.jpg)  
+
+relays controller: 
+![alt tag](https://github.com/npisanti/np-clayblocks/blob/master/relaybox/relays.jpg)  
