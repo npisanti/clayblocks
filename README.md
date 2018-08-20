@@ -1,4 +1,4 @@
-np-clayblocks
+clayblocks
 ==============
 `clayblocks` is a collection sketches/prototypes of devices that send and receive OSC messages over the network. It includes both android based controllers and raspberry pi based devices that convert sensors reading to OSC messages or control actuators by receiving OSC messages. 
 
