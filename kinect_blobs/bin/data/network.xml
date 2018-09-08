@@ -1,0 +1,5 @@
+<!--> network settings <-->
+<network>
+    <client_ip>localhost</client_ip>
+    <port>12345</port>
+</network>
