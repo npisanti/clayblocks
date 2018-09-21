@@ -22,6 +22,7 @@ public:
     
     unsigned int label;
     glm::vec2 center;
+    glm::vec2 velocity;
     ofRectangle box;
     bool found;
     bool update;
@@ -55,7 +56,6 @@ class ofApp : public ofBaseApp{
         ofxCvGrayscaleImage grayThreshFar;
             
         ofxCv::ContourFinder finder;
-
        
         ofxPanel panel;
             ofParameter<int> near;
