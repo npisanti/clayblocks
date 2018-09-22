@@ -1,4 +1,3 @@
-ofxXmlSettings
 ofxGui
 ofxOsc
 ofxKinect
