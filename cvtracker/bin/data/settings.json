@@ -4,7 +4,13 @@
         "camera": {
             "width": "1024",
             "height": "768",
-            "calibration_file" : "pimoroni_fisheye_1024x768.yml"
+            "calibration_file" : "pimoroni_fisheye_1024x768.yml",
+            "saturation": "0",
+            "sharpness": "0",
+            "contrast": "45",
+            "brightness": "60",
+            "auto_white_balance_mode": "7",
+            "exposure_mode": "2"
         },
         "cvtracker": {
             "area_max": "15000",
@@ -20,7 +26,7 @@
             "deadzone_height" : "0"
         },
         "network": {
-            "client_ip": "169.254.0.1",
+            "client_ip": "192.168.0.100",
             "ports": {
                 "tracking_send": "12345",
                 "image_send": "4242",

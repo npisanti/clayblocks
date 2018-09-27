@@ -38,6 +38,9 @@ public:
     
     ofxCvPiCam cam;
     
+    cv::Mat red;
+    std::vector <cv::Mat> channels;
+    
     cv::Mat frame;
     cv::Mat undistorted;
     cv::Mat tLow;
@@ -54,6 +57,12 @@ public:
             ofParameter<int> width;
             ofParameter<int> height;
             ofParameter<std::string> file;
+            ofParameter<int> saturation;
+            ofParameter<int> sharpness;
+            ofParameter<int> contrast;
+            ofParameter<int> brightness;
+            ofParameter<int> awbMode;
+            ofParameter<int> exposureMode;
         ofParameterGroup network;
             ofParameter<std::string> ip;
             ofParameterGroup ports;
@@ -91,5 +100,7 @@ public:
     ofxOscSender  debugger;
     char * buffer;
     size_t buffersize; 
+    
+    
     
 };

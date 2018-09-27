@@ -1,13 +1,50 @@
 
 #include "ofApp.h"
 
+    /*
+        auto white balance modes:
+            0] = "off";
+            1] = "auto";
+            2] = "sunlight";
+            3] = "cloudy";
+            4] = "shade";
+            5] = "tungsten";
+            6] = "fluorescent";
+            7] = "incandescent";
+            8] = "flash";
+            9] = "horizon";
+            10] = "max"; 
+    
+        saturation, sharpness and contrast goes to -100 to 100
+        brightness should go from 0 to 100
+
+        exposure modes:
+            0] = "off";
+            1] = "auto";
+            2] = "night";
+            3] = "night preview";
+            4] = "backlight";
+            5] = "spotlight";
+            6] = "sports";
+            7] = "snow";
+            8] = "beach";
+            9] = "very long";
+            10] = "fixed fps";
+            11] = "antishake";
+            12] = "fireworks";
+            13] = "max";
+    */
+
 #define BUFFERW 160
-#define BUFFERH 120 
+#define BUFFERH 120
+
+// #define CVTRACK_USE_RED
+#define CVTRACK_RED 2
 
 // ------------------------------------------------------------------
 void ofApp::setup() {
 	
-    blobs.reserve(64); // more than enough
+    blobs.reserve(128); // more than enough
     blobs.clear();
     
     ofSetVerticalSync(false);
@@ -27,11 +64,17 @@ void ofApp::setup() {
             camera.add( width.set("width", 640, 640, 1920) );
             camera.add( height.set("height", 480, 480, 1080) );
             camera.add( file.set("calibration file", "pimoroni_fisheye_640x480.yml") );
+            camera.add( saturation.set("saturation",0,-100,100) );
+            camera.add( sharpness.set("sharpness",0,-100,100) );
+            camera.add( contrast.set("contrast",0,-100,100) );
+            camera.add( brightness.set("brightness",50,0,100) );
+            camera.add( awbMode.set("auto white balance mode", 1,0,10) );
+            camera.add( exposureMode.set("exposure mode",0,0,13) );
         settings.add( camera );
     
         parameters.setName( "cvtracker");
             parameters.add( doBackgroundSubtraction.set("background subtraction", false) );
-                doBackgroundSubtraction.addListener( this, &ofApp::onBGSubtractionToggle );
+                //doBackgroundSubtraction.addListener( this, &ofApp::onBGSubtractionToggle );
             parameters.add( low.set("threshold low", 0, 0, 255) );
             parameters.add( high.set("threshold high", 255, 0, 255) );
             parameters.add( minArea.set("area min", 20, 1, 25000) );
@@ -66,10 +109,23 @@ void ofApp::setup() {
     //ofSavePrettyJson( "settings.json", json );
 
     // cam setup
-    cam.setup( width, height,false );
+#ifdef CVTRACK_USE_RED
+    cam.setup( width, height, true ); // use color, get red channel to use included blue gels
+#else
+    cam.setup( width, height, false ); 
+#endif
+
+    int mode = awbMode;
+    cam.setAWBMode( (MMAL_PARAM_AWBMODE_T) mode ); // auto white balance off
+    mode = exposureMode;
+    cam.setExposureMode((MMAL_PARAM_EXPOSUREMODE_T) mode );
+    cam.setBrightness( brightness );
+    cam.setSharpness( sharpness );
+    cam.setContrast( contrast );
+    cam.setSaturation( saturation );
+
 	calibration.setFillFrame( true ); // true by default
     calibration.load( file );
-
     
     // setting up matrices
     sender.setup( ip, trackingPort );
@@ -79,21 +135,30 @@ void ofApp::setup() {
     std::cout<<"[cvtracker] sending blob tracking OSC to "<<ip<<" on port "<<trackingPort<<"\n";
     std::cout<<"[cvtracker] sending debug low res image OSC to "<<ip<<" on port "<<imagePort<<"\n";
     std::cout<<"[cvtracker] syncing parameters to "<<ip<<" with ports "<<syncSendPort<<" (send) and "<<syncReceivePort<<" (receive) \n";
-    
+
     bool hasFrame = false;
     
     while(!hasFrame){
         frame = cam.grab();
         if( !frame.empty() ){
-            ofxCv::imitate(undistorted, frame);
+#ifdef CVTRACK_USE_RED
+            cv::split ( frame, channels );
+            red = channels[CVTRACK_RED];
+            ofxCv::imitate( undistorted, red);
+            ofxCv::imitate( tLow, red );
+            ofxCv::imitate( tHigh, red );
+            ofxCv::imitate( thresh, red );
+            ofxCv::imitate( background, red );
+#else
+            ofxCv::imitate( undistorted, frame);
             ofxCv::imitate( tLow, frame );
             ofxCv::imitate( tHigh, frame );
             ofxCv::imitate( thresh, frame );
             ofxCv::imitate( background, frame );
+#endif            
             hasFrame = true;
         }
     }
-
     
     divideW = 1.0f / float(width);
     divideH = 1.0f / float(height);
@@ -112,7 +177,13 @@ void ofApp::update() {
     frame = cam.grab();
     
     if(!frame.empty()){
-        calibration.undistort(frame, undistorted);
+#ifdef CVTRACK_USE_RED
+        cv::split ( frame, channels );
+        red = channels[CVTRACK_RED];
+        calibration.undistort( red, undistorted );
+#else
+        calibration.undistort( frame, undistorted );
+#endif
         
         if( bTakeBackground ){
             background = undistorted;
@@ -120,9 +191,9 @@ void ofApp::update() {
         }
         
         if( doBackgroundSubtraction ){
-            // do background subtraction on undistortion 
-            cv::subtract( undistorted, background, undistorted );
-            cv::threshold( undistorted, undistorted, 0, 255, 3 ); // remove values lower than 0? to test
+            cv::Mat subtracted;
+            cv::subtract( undistorted, background, subtracted );
+            undistorted = subtracted;
         }
         
         cv::threshold( undistorted, tLow,   low, 255,  0 );
