@@ -5,6 +5,7 @@
             "width": "1024",
             "height": "768",
             "calibration_file" : "pimoroni_fisheye_1024x768.yml",
+            "use_red_channel": "0",
             "saturation": "0",
             "sharpness": "0",
             "contrast": "45",
@@ -16,7 +17,9 @@
             "area_max": "15000",
             "area_min": "100",
             "background_subtraction": "0",
-            "send_image": "1",
+            "send_contours": "0",
+            "send_image": "0",
+            "simplify_contours": "0.6",
             "max_distance": "32",
             "persistence": "15",
             "threshold_high": "250",
@@ -26,10 +29,9 @@
             "deadzone_height" : "0"
         },
         "network": {
-            "client_ip": "192.168.0.100",
+            "client_ip": "169.254.0.1",
             "ports": {
-                "tracking_send": "12345",
-                "image_send": "4242",
+                "osc_send": "12345",
                 "sync_send": "4243",
                 "sync_receive": "4244"
             }
